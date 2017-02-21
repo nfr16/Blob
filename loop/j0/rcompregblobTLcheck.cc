@@ -62,12 +62,14 @@
 #include <cmath>
 #include "arcomp.h"
 #include "arrscomp.h"
-#include "cmatrixanoblob.h"
+#include "cmatrixablobL0.h"
 #include "rcompsol.h"
 
 using namespace std;
 
 void Permutations(int pos, int L, int open, int close, vector<vector<int>>& B, vector<int>& y, vector<int>& z);
+void Convert(int n, int j, vector<int>& w, int i);
+void Outloop(int pos, int& max, vector<vector<int>>& B, int i, int L);
 
 template<class T>
 void Test(T type)
@@ -75,28 +77,63 @@ void Test(T type)
 
 ofstream myfile;
 myfile.precision(16);
-myfile.open("FvsN34567early.dat");
+myfile.open("FvsNAF34567TLearly.dat");
+double gamma;
+int r1=1;
 double loopweightblob;
-//double loopweight=1.41421356237;
-//double loopweight=1.243219937;
-double loopweight;
 int L;
 
-for(loopweight=0;loopweight<=0.4;loopweight=loopweight+0.1)  
-{
-cout<<loopweight<<endl;
-loopweightblob=loopweight;
-for(L=3;L<=7;L++)
-{  
 
+
+for(double loopweight=0;loopweight<=0.4;loopweight=loopweight+0.1)
+{
+//cout << gamma << endl;
+//loopweightblob=(sin((r1+1)*gamma))/(sin(r1*gamma));
+
+
+loopweightblob=loopweight;
+
+
+//loopweightblob=1.41421356237;
+//double loopweight=1.41421356237;
+
+for(L=3;L<=7;L++)
+{
+
+
+int r=0;
 vector < vector<int> > B;
 vector < vector<int> > C;
 
+vector < vector<int> > D;
+
 vector<int> y (2*L,0);
 vector<int> z (2*L,0);
+vector<int> w (2*L,0);
 
 Permutations(0,L,0,0,B,y,z);
-//cout <<B.size()<<endl;
+
+
+int tzero=0;
+int tone=0;
+for(int i=0; i<B.size();i++)
+{
+tzero=0;
+tone=0;
+for(int j=0; j<(2*L);j++)
+	{
+		if (B[i][j]==0)
+		tzero++;
+		if (B[i][j]==1)
+		tone++;
+		if(tone==tzero)
+		B[i][j]=-1;
+		if(tone==tzero)
+		break;
+	}
+
+}
+
 
 /*for(int i=0;i<B.size();i++){
 for(int j=0;j<(2*L);j++){
@@ -104,7 +141,78 @@ cout << B[i][j];
 }
 cout << endl;
 }
+cin>>r;
 */
+
+int bsize=B.size();
+int combnum;
+int pos;
+int outloopnum=0;
+int max;
+int posinit=0;
+for(int i=0; i<bsize;i++)
+{
+for(int k=0; k<(2*L);k++)
+{
+  y[k]=B[i][k];
+}
+outloopnum=0;
+Outloop(posinit, max, B, i, L);
+pos=max+1;
+while(max!=(2*L-1))
+{
+Outloop(pos, max, B, i, L);
+outloopnum++;
+pos=max+1;
+}
+
+combnum=pow(2, outloopnum);
+w.resize(outloopnum);
+
+if(combnum!=1)
+{
+for(int k=1; k<combnum; k++)
+{
+
+for(int j=0; j<outloopnum; j++)
+{
+w[j]=0;
+}
+r=0;
+Convert(outloopnum, k, w, r);
+
+for(int j=0; j<outloopnum; j++)
+	{
+if (w[j]==1)
+		{	r=0;
+			Outloop(r, max, B, i, L);
+			for(int k1=0; k1<=j; k1++)
+				{
+					Outloop(max+1, max, B, i, L);	
+				}
+			y[max]=-1;
+		}
+	}
+B.push_back(y);
+for(int k1=0; k1<(2*L);k1++)
+{
+  y[k1]=B[i][k1];
+}
+}
+}				//end of if combnum statement
+
+}				//end of i loop
+
+
+/*for(int i=0;i<B.size();i++){
+for(int j=0;j<(2*L);j++){
+cout << B[i][j];
+}
+cout << endl;
+}
+cin>>r;
+*/
+
 
 
 int zerocount=0;
@@ -123,13 +231,21 @@ C.push_back(B[k]);
 				if(B[k][i+j]==0)
 				zerocount++;
 
-				if(B[k][i+j]==1)
+				if(B[k][i+j]==1 || B[k][i+j]==-1)
 				onecount++;
 
 				if(onecount>zerocount)
 				{
-				C[k][i+j]=i;
-				C[k][i]=i+j;	
+				  if(B[k][i+j]==1)
+					{
+						C[k][i+j]=i;
+						C[k][i]=i+j;
+					}
+				  if(B[k][i+j]==-1)
+					{
+						C[k][i+j]=-i;
+						C[k][i]=-(i+j);	
+					}
 				}	
 				if(onecount>zerocount)
 				break;				
@@ -139,75 +255,27 @@ C.push_back(B[k]);
 }
 
 
-
-/*for(int i=0;i<C.size();i++){
+/*
+for(int i=0;i<C.size();i++){
 for(int j=0;j<(2*L);j++){
 cout << C[i][j];
 }
 cout << endl;
 }
 
-cin >> L;
+
+cout<<C.size()<<endl;
+cout << "input r"<<endl;
+cin >> r;
 */
 
-
-/*int cond1, cond2;
-
-int r1=0;
-
-for(int i=0;i<2*L;i++)
-{
-y[i]=i;
-}
-
-sort(y.begin(),y.end());
-
-do{
-cond1=0;
-cond2=1;
-for(int j=0; j<2*L;j++)
-{
-if(y[y[j]]!=j || y[j]==j)
-break;
-
-if(j==(2*L-1))
-cond1=1;
-}					//end of j loop
-
-if(cond1==1)
-{
-for(int j=0; j<2*L;j++)
-{
-	if((y[j]-j)>1)
-		{
-			for(int k=j+1;k<y[j];k++)
-			{
-				if(y[k]>y[j])
-				cond2=0;	
-			}			
-			
-
-		}			//end of y[j]-j>1 if statement
-
-}
-}					//end of cond1==1 if statement
-
-
-if(cond1==1 && cond2==1)
-{
-B.push_back(y);
-r1++;
-}	
-
-}while(next_permutation(y.begin(),y.end()));
-*/
 
 
 
 // Defining a complex matrix.
 
 
-  int csize=C.size();
+	int csize=C.size();
 
   CompMatrixA<T> A(csize); // n = 10*10.
 
@@ -241,8 +309,10 @@ r1++;
 
       //A.MultMv(prob.GetVector(), prob.PutVector()); This line was here originally, revert to this if necessary
 
-	A.MultMv(prob.GetVector(), prob.PutVector(), C, L, loopweight, loopweightblob);
 	
+	A.MultMv(prob.GetVector(), prob.PutVector(), C, L, loopweight, loopweightblob);
+	//cout << i <<endl;
+	//i++;
 	
     }
 
@@ -260,17 +330,16 @@ double F;
 F=-(log(abs(prob.Eigenvalue(1).real())))/(2*L);
 
 if(L==3)
-myfile << loopweight <<"  ";
+myfile <<loopweight;
 
 myfile <<F<< "   ";
 
+}				//End of for loop over L
+myfile<< "\n";
+}				//End of loop over loopweightblob
 
-}				//End of loop over L
+myfile.close(); 
 
-myfile <<"\n";
-
-}
-myfile.close();
 
 } // Test.
 
@@ -319,4 +388,49 @@ else
 }
 
 }
+
+void Outloop(int pos, int& max, vector<vector<int>>& B, int i, int L)
+{
+int tzero=0;
+int tone=0;
+for(int j=0; j<(2*L-pos);j++)
+{if (B[i][pos+j]==0)
+tzero++;
+
+if (B[i][pos+j]==1 || B[i][pos+j]==-1 )
+tone++;
+
+if (tone==tzero)
+max=pos+j;
+
+if (tone==tzero)
+break;
+}
+}
+
+void Convert(int n, int j, vector<int>& w, int i)
+{
+
+	if (j!=0){
+
+		if (j%2==0){
+			w[n-i-1]=0;
+		}
+	   else {
+	   w[n-i-1]=1;
+	   }
+		j=j/2;
+        i=i+1;
+		Convert(n, j, w, i);
+
+	}
+}
+
+
+
+
+
+
+
+
 

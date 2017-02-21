@@ -47,7 +47,7 @@ class CompMatrixA: public MatrixWithProduct<std::complex<T> > {
 
 
  
-  void MultMv(std::complex<T>* v, std::complex<T>* w, vector<vector<int>> C, int L, double loopweight, double loopweightblob);
+ void MultMv(std::complex<T>* v, std::complex<T>* w, vector<vector<int>> C, int L, double loopweight, double loopweightblob);
 
   CompMatrixA(int n);
 
@@ -88,18 +88,17 @@ void CompMatrixA<T>::MultMv(std::complex<T>* v, std::complex<T>* w, vector<vecto
 
 
 
+
+
 int r;
-//double x1=1;
-//double x1=-0.414213562373095;
-double x1;
-x1=(sqrt(4-(loopweight)*(loopweight))-2)/(loopweight);
+double x1=-0.414213562373095;
 double x2=x1;
 vector<int> z (2*L,0);
 vector<int> y (2*L,0);
 
 
 
-int p=1709;
+int p=1907;
 struct node                                   //
 {                                             //
     std::complex<double> vectcomp;                 //new data structure that will be inserted into hash table                                //
@@ -157,37 +156,14 @@ vector<int> looptemp(w1a,w1a+sizeof(w1a)/sizeof(int));		//insert initial node in
 w1.loop = looptemp;						//
 WTable.insert({w1.loop, w1});					//
 */
-
 						
 for(int i=(2*L-3); i>0; i=i-2){					//loop over even Xi (even when considering first position as position 1, not 0)
 for (it=VTable.begin(); it!=VTable.end(); it++){		//loop over components of input vector
 
 
-if (VTable[it->first].loop[i]==i+1 || VTable[it->first].loop[i]==-(i+1)){
-	if(VTable[it->first].loop[i]<=0 || VTable[it->first].loop[i+1]<=0)
-		{
-		WTable[it->first].vectcomp=VTable[it->first].vectcomp;
-		WTable[it->first].loop=VTable[it->first].loop;
-
-		z=WTable[it->first].loop;
-		z[i]=abs(z[i]);
-		z[i+1]=abs(z[i+1]);
-
-		it2=addWTable.find(z);
-		if(it2==addWTable.end())
-			{
-				addWTable[z].vectcomp=0;
-			}
-
-		addWTable[z].vectcomp=addWTable[z].vectcomp+x2*loopweightblob*VTable[it->first].vectcomp;
-		addWTable[z].loop=z;
-		}		
-	else
-		{
-		WTable[it->first].vectcomp=VTable[it->first].vectcomp+x1*loopweight*VTable[it->first].vectcomp;
-		WTable[it->first].loop=VTable[it->first].loop;
-		}
-
+if (VTable[it->first].loop[i]==i+1){
+WTable[it->first].vectcomp=VTable[it->first].vectcomp+x1*loopweight*VTable[it->first].vectcomp;
+WTable[it->first].loop=VTable[it->first].loop;
 }									//end of loop[i]=i+1 if statement
 
 
@@ -197,23 +173,10 @@ WTable[it->first].vectcomp=VTable[it->first].vectcomp;
 WTable[it->first].loop=VTable[it->first].loop;
 
 z=WTable[it->first].loop;
-
-if(z[i]<=0 || z[i+1]<=0)
-{
-z[abs(z[i+1])]=-abs(z[i]);
-z[abs(z[i])]=-abs(z[i+1]);
-}
-
-else
-{
 z[z[i+1]]=z[i];
 z[z[i]]=z[i+1];
-}
-
 z[i]=i+1;
 z[i+1]=i;
-
-
 it2=addWTable.find(z);
 
 if(it2==addWTable.end()){
@@ -268,36 +231,13 @@ cin >> loopweight;
 
 }								//end of even i loop
 
-for(int i=(2*L-2); i>=0; i=i-2){					//loop over odd Xi (odd when considering first position as position 1, not 0)
+for(int i=(2*L-2); i>=0; i=i-2){					//loop over odd Xi (even when considering first position as position 1, not 0)
 for (it=VTable.begin(); it!=VTable.end(); it++){		//loop over components of input vector
 
 
-if (VTable[it->first].loop[i]==i+1 || VTable[it->first].loop[i]==-(i+1)){
-	if(VTable[it->first].loop[i]<=0 || VTable[it->first].loop[i+1]<=0)
-		{
-		WTable[it->first].vectcomp=x1*VTable[it->first].vectcomp;
-		WTable[it->first].loop=VTable[it->first].loop;
-		
-		z=WTable[it->first].loop;
-		if(i!=0){
-		z[i]=abs(z[i]);
-		z[i+1]=abs(z[i+1]);
-		}
-
-		it2=addWTable.find(z);
-		if(it2==addWTable.end())
-			{
-				addWTable[z].vectcomp=0;
-			}
-		addWTable[z].vectcomp=addWTable[z].vectcomp+loopweightblob*VTable[it->first].vectcomp;
-		addWTable[z].loop=z;
-		}		
-	else
-		{
-		WTable[it->first].vectcomp=x1*VTable[it->first].vectcomp+loopweight*VTable[it->first].vectcomp;
-		WTable[it->first].loop=VTable[it->first].loop;
-		}
-
+if (VTable[it->first].loop[i]==i+1){
+WTable[it->first].vectcomp=x2*VTable[it->first].vectcomp+loopweight*VTable[it->first].vectcomp;
+WTable[it->first].loop=VTable[it->first].loop;
 }									//end of loop[i]=i+1 if statement
 
 else
@@ -306,25 +246,10 @@ WTable[it->first].vectcomp=x2*VTable[it->first].vectcomp;
 WTable[it->first].loop=VTable[it->first].loop;
 
 z=WTable[it->first].loop;
-
-if(z[i]<=0 || z[i+1]<=0)
-{
-z[abs(z[i+1])]=-abs(z[i]);
-z[abs(z[i])]=-abs(z[i+1]);
-}
-
-else
-{
 z[z[i+1]]=z[i];
 z[z[i]]=z[i+1];
-}
-
 z[i]=i+1;
 z[i+1]=i;
-
-if(i==0)
-z[0]=-z[0];
-
 
 it2=addWTable.find(z);
 
@@ -379,9 +304,7 @@ cin >> loopweight;
 }								//end of odd i loop
 
 
-/*cout << WTable.size()<<endl;
-cin>>r;
-*/
+
 for(int i=0;i<(C.size());i++)
 {
 w[i]=WTable[C[i]].vectcomp;
@@ -438,12 +361,12 @@ int name_hash(const vector<int> &a)
 {
 
 	if (a[i]!=-1)
-	total=((sizeof(a)/sizeof(int))*total+a[i])%1709;
+	total=(sizeof(a)/sizeof(int))*total+a[i];
 
 }
                           
 int totalmod;
-totalmod=total%1709;   						//Change this depending on number of expected states                 
+totalmod=total%16787;   						//Change this depending on number of expected states                 
                                             
  return totalmod;                           
 }

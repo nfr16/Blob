@@ -93,6 +93,8 @@ int r;
 //double x1=-0.414213562373095;
 double x1;
 x1=(sqrt(4-(loopweight)*(loopweight))-2)/(loopweight);
+cout<<x1;
+cin>>r;
 double x2=x1;
 vector<int> z (2*L,0);
 vector<int> y (2*L,0);

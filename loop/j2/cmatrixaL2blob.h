@@ -89,13 +89,11 @@ void CompMatrixA<T>::MultMv(std::complex<T>* v, std::complex<T>* w, vector<vecto
 
 
 int r;
-//double x1=1;
 //double x1=-0.414213562373095;
-double x1;
-x1=(sqrt(4-(loopweight)*(loopweight))-2)/(loopweight);
+double x1=1;
 double x2=x1;
-vector<int> z (2*L,0);
-vector<int> y (2*L,0);
+vector<int> z (2*L+2,0);
+vector<int> y (2*L+2,0);
 
 
 
@@ -121,9 +119,6 @@ for(int i=0;i<(C.size());i++)
 VTable[C[i]].vectcomp=v[i];
 VTable[C[i]].loop=C[i];
 }
-
-
-
 
 
 
@@ -159,7 +154,7 @@ WTable.insert({w1.loop, w1});					//
 */
 
 						
-for(int i=(2*L-3); i>0; i=i-2){					//loop over even Xi (even when considering first position as position 1, not 0)
+for(int i=(2*L-1); i>0; i=i-2){					//loop over even Xi (even when considering first position as position 1, not 0)
 for (it=VTable.begin(); it!=VTable.end(); it++){		//loop over components of input vector
 
 
@@ -198,6 +193,41 @@ WTable[it->first].loop=VTable[it->first].loop;
 
 z=WTable[it->first].loop;
 
+if (abs(z[i])==100 && abs(z[i+1])==100)
+{
+z[i]=i+1;
+z[i+1]=i;
+}
+
+else			
+{
+if(abs(z[i+1])==100)
+{
+if(z[i]<=0 || z[i+1]<=0)
+{
+z[abs(z[i])]=-abs(z[i+1]);
+}
+
+else
+z[z[i]]=z[i+1];
+}
+
+else if (abs(z[i])==100)
+{
+
+if(z[i]<=0 || z[i+1]<=0)
+{
+z[abs(z[i+1])]=-abs(z[i]);
+}
+
+else
+z[z[i+1]]=z[i];
+
+}
+
+
+else
+{
 if(z[i]<=0 || z[i+1]<=0)
 {
 z[abs(z[i+1])]=-abs(z[i]);
@@ -210,8 +240,14 @@ z[z[i+1]]=z[i];
 z[z[i]]=z[i+1];
 }
 
+}
+
 z[i]=i+1;
 z[i+1]=i;
+
+}			//end of else if not both 100
+
+
 
 
 it2=addWTable.find(z);
@@ -257,18 +293,18 @@ for (it=addWTable.begin(); it!=addWTable.end(); it++){              //
 {
 cout << "i = " << i << endl;
 cout << WTable[it->first].vectcomp << endl;
-for(int i=0;i<2*L;i++)
+for(int i=0;i<2*L+2;i++)
 {
-cout << WTable[it->first].loop[i];
+cout << WTable[it->first].loop[i]<<" ";
 }
 cout << "\n" << endl;
 }
-cin >> loopweight;
+cin >> r;
 */
 
 }								//end of even i loop
 
-for(int i=(2*L-2); i>=0; i=i-2){					//loop over odd Xi (odd when considering first position as position 1, not 0)
+for(int i=(2*L); i>=0; i=i-2){					//loop over odd Xi (odd when considering first position as position 1, not 0)
 for (it=VTable.begin(); it!=VTable.end(); it++){		//loop over components of input vector
 
 
@@ -307,6 +343,41 @@ WTable[it->first].loop=VTable[it->first].loop;
 
 z=WTable[it->first].loop;
 
+if (abs(z[i])==100 && abs(z[i+1])==100)
+{
+z[i]=i+1;
+z[i+1]=i;
+}
+
+else			
+{
+if(abs(z[i+1])==100)
+{
+if(z[i]<=0 || z[i+1]<=0)
+{
+z[abs(z[i])]=-abs(z[i+1]);
+}
+
+else
+z[z[i]]=z[i+1];
+}
+
+else if (abs(z[i])==100)
+{
+
+if(z[i]<=0 || z[i+1]<=0)
+{
+z[abs(z[i+1])]=-abs(z[i]);
+}
+
+else
+z[z[i+1]]=z[i];
+
+}
+
+
+else
+{
 if(z[i]<=0 || z[i+1]<=0)
 {
 z[abs(z[i+1])]=-abs(z[i]);
@@ -319,8 +390,12 @@ z[z[i+1]]=z[i];
 z[z[i]]=z[i+1];
 }
 
+}
+
 z[i]=i+1;
 z[i+1]=i;
+
+}			//end of else if not both 100
 
 if(i==0)
 z[0]=-z[0];
@@ -374,6 +449,19 @@ cout << WTable[it->first].loop[i];
 cout << "\n" << endl;
 }
 cin >> loopweight;
+*/
+
+/*for(it=WTable.begin();it!=WTable.end();it++)			//TEST
+{
+cout << "i = " << i << endl;
+cout << WTable[it->first].vectcomp << endl;
+for(int i=0;i<2*L+2;i++)
+{
+cout << WTable[it->first].loop[i]<<" ";
+}
+cout << "\n" << endl;
+}
+cin >> r;
 */
 
 }								//end of odd i loop
