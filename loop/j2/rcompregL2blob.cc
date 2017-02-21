@@ -62,7 +62,7 @@
 #include <cmath>
 #include "arcomp.h"
 #include "arrscomp.h"
-#include "cmatrixablobL0.h"
+#include "cmatrixa.h"
 #include "rcompsol.h"
 
 using namespace std;
@@ -77,51 +77,155 @@ void Test(T type)
 
 ofstream myfile;
 myfile.precision(16);
-myfile.open("FvsNAF34567j0r1.dat");
-double gamma;
-int r1=1;
+myfile.open("FvsN34567L2.dat");
 double loopweightblob;
 int L;
 
 
 
-for(gamma=1.9;gamma<=2.5;gamma=gamma+0.1)
+for(loopweightblob=0;loopweightblob<=1.8;loopweightblob=loopweightblob+0.1)
 {
-cout << gamma << endl;
-loopweightblob=(sin((r1+1)*gamma))/(sin(r1*gamma));
-for(L=3;L<=7;L++)
+for(L=2;L<=6;L++)
 {
 
-
-double loopweight=2*cos(gamma);
+double loopweight=1.414213562373095;
 
 int r=0;
 vector < vector<int> > B;
 vector < vector<int> > C;
-
 vector < vector<int> > D;
+vector < vector<int> > E;
+vector < vector<int> > G;
 
 vector<int> y (2*L,0);
+vector<int> ynew (2*L+1,0);
+vector<int> ynew2 (2*L+2,0);
 vector<int> z (2*L,0);
 vector<int> w (2*L,0);
 
 Permutations(0,L,0,0,B,y,z);
 
+/*for(int i=0;i<B.size();i++){
+for(int j=0;j<(2*L);j++){
+cout << B[i][j]<<" ";
+}
+cout << endl;
+}
+cin>>r;
+*/
+
+
+for(int i=0;i<B.size();i++)
+{
+for(int j=0; j<=2*L; j++)
+	{	
+		int totalopen=0;
+		int totalclose=0;
+		for(int k=0;k<j;k++)
+		{
+			if (B[i][k]==0)
+			totalopen++;
+			if (B[i][k]==1)
+			totalclose++;	
+		}
+		
+		if(j==0||totalopen==totalclose)		
+		{
+		for(int k=0;k<j;k++)
+		{
+			ynew[k]=B[i][k];
+		}
+		
+		ynew[j]=100;
+
+		for(int k=j+1;k<=2*L;k++)
+		{
+			ynew[k]=B[i][k-1];
+		}
+		E.push_back(ynew);
+		}
+	}
+}
+
+
+int cond1=0;
+for(int i=0;i<E.size();i++)
+{
+for(int j=0; j<=2*L; j++)
+	{	
+		int totalopen=0;
+		int totalclose=0;
+		for(int k=0;k<j;k++)
+		{
+			if (E[i][k]==0)
+			totalopen++;
+			if (E[i][k]==1)
+			totalclose++;	
+		}
+		
+		if(j==0||totalopen==totalclose)		
+		{
+		for(int k=0;k<j;k++)
+		{
+			ynew2[k]=E[i][k];
+		}
+		
+		
+		ynew2[j]=100;
+
+		for(int k=j+1;k<=(2*L+1);k++)
+		{
+			ynew2[k]=E[i][k-1];
+		}
+
+
+			for(int j1=0; j1<G.size();j1++)
+			{
+				if (ynew2==G[j1])
+				{cond1=2;
+				
+				}
+				
+			}
+			if (cond1!=2)
+			{
+			G.push_back(ynew2);
+			}
+			cond1=0;
+
+		}
+	}
+}
+
+
+/*for(int i=0;i<G.size();i++){
+for(int j=0;j<(2*L+2);j++){
+cout << G[i][j]<<" ";
+}
+cout << endl;
+}
+cin>>r;
+*/
+
 
 int tzero=0;
 int tone=0;
-for(int i=0; i<B.size();i++)
+for(int i=0; i<G.size();i++)
 {
 tzero=0;
 tone=0;
-for(int j=0; j<(2*L);j++)
+for(int j=0; j<(2*L+2);j++)
 	{
-		if (B[i][j]==0)
+		if(G[i][j]==100)			
+		G[i][j]=-100;
+		if(G[i][j]==-100)			
+		break;
+		if (G[i][j]==0)
 		tzero++;
-		if (B[i][j]==1)
+		if (G[i][j]==1)
 		tone++;
-		if(tone==tzero)
-		B[i][j]=-1;
+		if(tone==tzero && G[i][j]!=100)
+		G[i][j]=-1;
 		if(tone==tzero)
 		break;
 	}
@@ -129,36 +233,79 @@ for(int j=0; j<(2*L);j++)
 }
 
 
-/*for(int i=0;i<B.size();i++){
-for(int j=0;j<(2*L);j++){
-cout << B[i][j];
+/*for(int i=0;i<G.size();i++){
+for(int j=0;j<(2*L+2);j++){
+cout << G[i][j]<<" ";
 }
 cout << endl;
 }
 cin>>r;
 */
 
-int bsize=B.size();
+
+
+int gsize=G.size();
 int combnum;
 int pos;
 int outloopnum=0;
 int max;
 int posinit=0;
-for(int i=0; i<bsize;i++)
+int cond2=0;
+for(int i=0; i<gsize;i++)
 {
-for(int k=0; k<(2*L);k++)
+
+for(int k=0; k<(2*L+2);k++)
 {
-  y[k]=B[i][k];
+  ynew2[k]=G[i][k];
 }
 outloopnum=0;
-Outloop(posinit, max, B, i, L);
-pos=max+1;
-while(max!=(2*L-1))
+if(ynew2[posinit]!=-100)
 {
-Outloop(pos, max, B, i, L);
-outloopnum++;
+Outloop(posinit, max, G, i, L);
+if(abs(G[i][max+1])!=100)
 pos=max+1;
+else if(abs(G[i][max+2])!=100)
+pos=max+2;
+else
+pos=max+3;
 }
+else if (ynew2[posinit+1]!=100)
+{
+pos=1;
+max=0;
+}
+else
+{
+pos=2;
+max=0;
+}
+
+while(max!=(2*L+1))
+{
+
+Outloop(pos, max, G, i, L);
+outloopnum++;
+
+
+
+if(abs(G[i][max+1])!=100||max==(2*L+1))
+pos=max+1;
+ 
+else if (abs(G[i][max+2])!=100||max==2*L)
+{
+pos=max+2;
+max=max+1;
+}
+else
+{
+pos=max+3;
+max=max+2;
+}
+
+
+}
+
+
 
 combnum=pow(2, outloopnum);
 w.resize(outloopnum);
@@ -175,35 +322,115 @@ w[j]=0;
 r=0;
 Convert(outloopnum, k, w, r);
 
+
+if(ynew2[0]!=-100 && ynew2[1]!=100)
+{
 for(int j=0; j<outloopnum; j++)
 	{
 if (w[j]==1)
 		{	r=0;
-			Outloop(r, max, B, i, L);
+			Outloop(r, max, G, i, L);
+			if(ynew2[max+1]!=100){
 			for(int k1=0; k1<=j; k1++)
-				{
-					Outloop(max+1, max, B, i, L);	
+				{	
+					Outloop(max+1, max, G, i, L);
+					if (ynew2[max+1]==100 && k1!=j)
+					cond1=1;
+					if (ynew2[max+1]==100 && k1!=j)
+					break;
 				}
-			y[max]=-1;
+			if(cond1!=1)
+			ynew2[max]=-1;
+			else
+			{			
+			ynew2[max+1]=-100;
+			cond1=0;
+			}
+					    }
+
+		
+			else 
+			{
+				ynew2[max+1]=-100;
+			}
 		}
 	}
-B.push_back(y);
-for(int k1=0; k1<(2*L);k1++)
+for(int j=0; j<G.size();j++)
+			{
+				if (ynew2==G[j])
+				cond1=2;
+			}
+if (cond1!=2)
 {
-  y[k1]=B[i][k1];
+G.push_back(ynew2);
+cond1=3;
 }
+
+
+
+for(int k1=0; k1<(2*L+1);k1++)
+{
+  ynew2[k1]=G[i][k1];
 }
+
+}				//end of if ynew2 not equal to -100
+
+
+}				//end of k
+
 }				//end of if combnum statement
+
 
 }				//end of i loop
 
 
-/*for(int i=0;i<B.size();i++){
-for(int j=0;j<(2*L);j++){
-cout << B[i][j];
+for(int i=0; i<G.size();i++)
+{
+if(abs(G[i][2*L])==100)
+{
+/*for(int k2=0;k2<(2*L+1);k2++)
+{
+cout<<E[i][k2]<<" ";
+}
+cout << "\n";
+*/
+ynew2=G[i];
+ynew2[2*L]=-ynew2[2*L];
+
+/*for(int k2=0;k2<(2*L+1);k2++)
+{
+cout<<ynew[k2]<<" ";
+}
+cout << "\n";
+*/
+for(int j=0; j<G.size();j++)
+			{
+				if (ynew2==G[j])
+				{
+					cond2=1;
+			
+				}
+			}
+if (cond2!=1)
+{
+G.push_back(ynew2);
+}
+cond2=0;
+
+}
+}
+
+
+
+
+/*for(int i=0;i<G.size();i++){
+for(int j=0;j<(2*L+2);j++){
+cout << G[i][j]<<" ";
 }
 cout << endl;
 }
+
+cout << G.size();
 cin>>r;
 */
 
@@ -211,31 +438,34 @@ cin>>r;
 
 int zerocount=0;
 int onecount=0;
-for(int k=0;k<B.size(); k++)
+for(int k=0;k<G.size(); k++)
 {
-C.push_back(B[k]);
+C.push_back(G[k]);
 
-	for(int i=0; i<2*L;i++)
+	for(int i=0; i<=(2*L+1);i++)
 	{
-		if(B[k][i]==0)
+		if(abs(G[k][i])==100)
+		C[k][i]=G[k][i];		
+				
+		if(G[k][i]==0)
 		{	zerocount=0;
 			onecount=0;
-			for(int j=1; j<(2*L-i);j++)
+			for(int j=1; j<(2*L+2-i);j++)
 			{
-				if(B[k][i+j]==0)
+				if(G[k][i+j]==0)
 				zerocount++;
 
-				if(B[k][i+j]==1 || B[k][i+j]==-1)
+				if(G[k][i+j]==1 || G[k][i+j]==-1)
 				onecount++;
 
 				if(onecount>zerocount)
 				{
-				  if(B[k][i+j]==1)
+				  if(G[k][i+j]==1)
 					{
 						C[k][i+j]=i;
 						C[k][i]=i+j;
 					}
-				  if(B[k][i+j]==-1)
+				  if(G[k][i+j]==-1)
 					{
 						C[k][i+j]=-i;
 						C[k][i]=-(i+j);	
@@ -249,14 +479,13 @@ C.push_back(B[k]);
 }
 
 
-/*
-for(int i=0;i<C.size();i++){
-for(int j=0;j<(2*L);j++){
-cout << C[i][j];
-}
-cout << endl;
-}
 
+/*for(int i=0;i<C.size();i++){
+for(int j=0;j<=(2*L+1);j++){
+cout << C[i][j]<<" ";
+}
+cout << "\n";
+}
 
 cout<<C.size()<<endl;
 cout << "input r"<<endl;
@@ -302,10 +531,9 @@ cin >> r;
 	v[0]=prob.GetVector();*/
 
       //A.MultMv(prob.GetVector(), prob.PutVector()); This line was here originally, revert to this if necessary
-
 	
 	A.MultMv(prob.GetVector(), prob.PutVector(), C, L, loopweight, loopweightblob);
-	//cout << i <<endl;
+	cout << " y= " << loopweightblob <<endl;
 	//i++;
 	
     }
@@ -321,13 +549,9 @@ cin >> r;
   Solution(prob);
 
 double F;
-F=-(log(abs(prob.Eigenvalue(1).real())))/(2*L);
-if(L==3)
-{
-myfile << gamma << "  ";
+F=-(log(abs(prob.Eigenvalue(1).real())))/(2*L+2);
+if(L==2)
 myfile << loopweightblob << "	";
-}
-
 
 myfile <<F<< "   ";
 
@@ -390,7 +614,7 @@ void Outloop(int pos, int& max, vector<vector<int>>& B, int i, int L)
 {
 int tzero=0;
 int tone=0;
-for(int j=0; j<(2*L-pos);j++)
+for(int j=0; j<(2*L+2-pos);j++)
 {if (B[i][pos+j]==0)
 tzero++;
 

@@ -91,14 +91,15 @@ void CompMatrixA<T>::MultMv(std::complex<T>* v, std::complex<T>* w, vector<vecto
 
 
 int r;
-double x1=-0.414213562373095;
+double x1;
+x1=(sqrt(4-(loopweight)*(loopweight))-2)/(loopweight);
 double x2=x1;
 vector<int> z (2*L,0);
 vector<int> y (2*L,0);
 
 
 
-int p=16787;
+int p=1907;
 struct node                                   //
 {                                             //
     std::complex<double> vectcomp;                 //new data structure that will be inserted into hash table                                //

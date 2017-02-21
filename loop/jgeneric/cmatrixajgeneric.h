@@ -89,8 +89,8 @@ void CompMatrixA<T>::MultMv(std::complex<T>* v, std::complex<T>* w, vector<vecto
 
 int r;
 double x1=-0.414213562373095;
-//double x1=1;
-double x2=x1;
+//double x1=1;					//ferromagnetic
+double x2=x1;					//antiferromagnetic
 vector<int> z (2*L,0);
 vector<int> y (2*L,0);
 
