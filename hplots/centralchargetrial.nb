@@ -1,0 +1,289 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     10133,        281]
+NotebookOptionsPosition[      9565,        256]
+NotebookOutlinePosition[      9904,        271]
+CellTagsIndexPosition[      9861,        268]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Do", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"x", "=", 
+     RowBox[{"ReadList", "[", 
+      RowBox[{
+      "\"\</home/niall/Documents/CFT/ARPACK/arpack++/TMSpectrum/HvsL.dat\>\"",
+        ",", " ", "Number", ",", 
+       RowBox[{"RecordLists", "\[Rule]", "True"}]}], "]"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"FL1", "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"x", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "*", "2"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"FL2", "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"x", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "[", 
+       RowBox[{"[", "2", "]"}], "]"}], "*", "2"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"FL3", "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"x", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "[", 
+       RowBox[{"[", "3", "]"}], "]"}], "*", "2"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"FL4", "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"x", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "[", 
+       RowBox[{"[", "4", "]"}], "]"}], "*", "2"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"FL5", "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"x", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "[", 
+       RowBox[{"[", "5", "]"}], "]"}], "*", "2"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"outputc", "=", 
+     RowBox[{"c", "/.", 
+      RowBox[{
+       RowBox[{"Solve", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"FL5", "\[Equal]", 
+            RowBox[{"fb", "+", 
+             RowBox[{"fs", "/", "8"}], "-", 
+             RowBox[{"Pi", "*", 
+              RowBox[{"c", "/", 
+               RowBox[{"(", 
+                RowBox[{"24", "*", 
+                 RowBox[{"(", 
+                  RowBox[{"8", "^", "2"}], ")"}]}], ")"}]}]}], "+", 
+             RowBox[{"A", "/", 
+              RowBox[{"(", 
+               RowBox[{"8", "^", "3"}], ")"}]}], "+", 
+             RowBox[{"B", "/", 
+              RowBox[{"(", 
+               RowBox[{"8", "^", "4"}], ")"}]}]}]}], ",", 
+           RowBox[{"FL1", "\[Equal]", 
+            RowBox[{"fb", "+", 
+             RowBox[{"fs", "/", "4"}], "-", 
+             RowBox[{"Pi", "*", 
+              RowBox[{"c", "/", 
+               RowBox[{"(", 
+                RowBox[{"24", "*", 
+                 RowBox[{"(", 
+                  RowBox[{"4", "^", "2"}], ")"}]}], ")"}]}]}], "+", 
+             RowBox[{"A", "/", 
+              RowBox[{"(", 
+               RowBox[{"4", "^", "3"}], ")"}]}], "+", 
+             RowBox[{"B", "/", 
+              RowBox[{"(", 
+               RowBox[{"4", "^", "4"}], ")"}]}]}]}], ",", 
+           RowBox[{"FL2", "\[Equal]", 
+            RowBox[{"fb", "+", 
+             RowBox[{"fs", "/", "5"}], "-", 
+             RowBox[{"Pi", "*", 
+              RowBox[{"c", "/", 
+               RowBox[{"(", 
+                RowBox[{"24", 
+                 RowBox[{"(", 
+                  RowBox[{"5", "^", "2"}], ")"}]}], ")"}]}]}], "+", 
+             RowBox[{"A", "/", 
+              RowBox[{"(", 
+               RowBox[{"5", "^", "3"}], ")"}]}], "+", 
+             RowBox[{"B", "/", 
+              RowBox[{"(", 
+               RowBox[{"5", "^", "4"}], ")"}]}]}]}], ",", 
+           RowBox[{"FL4", "\[Equal]", 
+            RowBox[{"fb", "+", 
+             RowBox[{"fs", "/", "7"}], "-", 
+             RowBox[{"Pi", "*", 
+              RowBox[{"c", "/", 
+               RowBox[{"(", 
+                RowBox[{"24", "*", 
+                 RowBox[{"(", 
+                  RowBox[{"7", "^", "2"}], ")"}]}], ")"}]}]}], "+", 
+             RowBox[{"A", "/", 
+              RowBox[{"(", 
+               RowBox[{"7", "^", "3"}], ")"}]}], "+", 
+             RowBox[{"B", "/", 
+              RowBox[{"(", 
+               RowBox[{"7", "^", "4"}], ")"}]}]}]}], ",", 
+           RowBox[{"FL3", "\[Equal]", 
+            RowBox[{"fb", "+", 
+             RowBox[{"fs", "/", "6"}], "-", 
+             RowBox[{"Pi", "*", 
+              RowBox[{"c", "/", 
+               RowBox[{"(", 
+                RowBox[{"24", "*", 
+                 RowBox[{"(", 
+                  RowBox[{"6", "^", "2"}], ")"}]}], ")"}]}]}], "+", 
+             RowBox[{"A", "/", 
+              RowBox[{"(", 
+               RowBox[{"6", "^", "3"}], ")"}]}], "+", 
+             RowBox[{"B", "/", 
+              RowBox[{"(", 
+               RowBox[{"6", "^", "4"}], ")"}]}]}]}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+          "c", ",", " ", "fb", ",", " ", "fs", ",", " ", "A", ",", " ", "B"}],
+           "}"}]}], "]"}], "[", 
+       RowBox[{"[", "1", "]"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"array", "=", 
+     RowBox[{"{", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"x", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "[", 
+         RowBox[{"[", "1", "]"}], "]"}], ",", " ", "outputc"}], "}"}], 
+      "}"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"str", "=", 
+     RowBox[{
+     "OpenAppend", "[", 
+      "\"\</home/niall/Documents/CFT/ARPACK/arpack++/TMSpectrum/yvsc.dat\>\"",
+       "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Export", "[", 
+     RowBox[{"str", ",", " ", "array"}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"WriteString", "[", 
+     RowBox[{"str", ",", "\"\<\\n\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Close", "[", "str", "]"}]}], "\[IndentingNewLine]", ",", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "1"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.694330120033328*^9, 3.6943301228068247`*^9}, {
+   3.6943302521972017`*^9, 3.6943302552320967`*^9}, {3.694330331625231*^9, 
+   3.694330437348515*^9}, {3.694330510796225*^9, 3.694330667380155*^9}, {
+   3.69433076008279*^9, 3.694330760308144*^9}, 3.6943308525835657`*^9, {
+   3.6943309614996243`*^9, 3.6943309627432337`*^9}, 3.694331030175473*^9, {
+   3.694331073466958*^9, 3.69433109038208*^9}, {3.694331208187687*^9, 
+   3.6943312557397003`*^9}, {3.694331378623864*^9, 3.694331434518711*^9}, {
+   3.694331591348398*^9, 3.6943316016338177`*^9}, 3.694331683384036*^9, {
+   3.694331742023797*^9, 3.6943317423138857`*^9}, {3.694438501462187*^9, 
+   3.694438501945465*^9}, {3.694438532674203*^9, 3.694438533415464*^9}, {
+   3.694439159946363*^9, 3.694439166726741*^9}, {3.694439314351863*^9, 
+   3.6944393976205473`*^9}, {3.694441056655354*^9, 3.69444117347768*^9}, {
+   3.694441220772127*^9, 3.6944412333654757`*^9}, {3.694442824325693*^9, 
+   3.694442837814876*^9}, {3.694442899135037*^9, 3.694443003086049*^9}, {
+   3.694447839184709*^9, 3.694447844646579*^9}, {3.694447897369821*^9, 
+   3.6944480275669527`*^9}, {3.694448284702883*^9, 3.694448341486004*^9}, {
+   3.694448382276718*^9, 3.6944484062695436`*^9}, {3.694448440226*^9, 
+   3.694448502406054*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FilePrint", "[", 
+  "\"\</home/niall/Documents/CFT/ARPACK/arpack++/TMSpectrum/yvsc.dat\>\"", 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.694330788763255*^9, 3.694330790282284*^9}}],
+
+Cell["\<\
+1.6\t-0.2686649790627622
+1.8\t-0.2686649790627622
+2\t-0.2686649790627622
+1.414213562373095\t-0.24359062327872083
+-0.6561932497254835\t-2.473731430165553
+-0.6561932497254835\t-0.24590532285953695
+-0.6561932497254835\t0.24590532285953695
+-0.6561932497254835\t0.9836212914381478
+-0.6561932497254835\t0.4918106457190739
+-0.6561932497254835\t0.9836212914381478
+-0.6561932497254835\t0.9836212914381478
+-0.6561932497254835\t(6.049163027146659*^-61*6**100)/(-7.072373831745582*^-55 \
++ 1.1799589500152922*^-57*6**100)
+-0.6561932497254835\t0.4918106457190739
+-0.6561932497254835\t-0.01469859076071306
+-0.6561932497254835\t-0.0001034955062539971
+-0.6561932497254835\t0.4918106457190739
+-0.6561932497254835\t0.4918106457190739
+-0.6561932497254835\t0.4918106457190739
+-0.6561932497254835\t0.4918106457190739
+-0.6561932497254835\t0.4918106457190739\
+\>", "Print",
+ CellChangeTimes->{
+  3.694330797298424*^9, 3.694330838122773*^9, 3.694331096285*^9, 
+   3.694331132115673*^9, 3.694331245498461*^9, 3.694331391527863*^9, {
+   3.694331530287857*^9, 3.694331536972582*^9}, {3.69433173478822*^9, 
+   3.694331746569397*^9}, 3.694331995564089*^9, 3.694332046516643*^9, 
+   3.694332249660542*^9, 3.694438569478006*^9, 3.694439186463581*^9, 
+   3.694439404320952*^9, 3.694441126436286*^9, 3.694441179710306*^9, 
+   3.694441238663005*^9, 3.6944430079707947`*^9, 3.694448289462283*^9, 
+   3.6944483468287287`*^9, 3.694448429283648*^9, 3.694448480597445*^9, 
+   3.694448518826654*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["FL1"], "Input",
+ CellChangeTimes->{{3.6944392646408043`*^9, 3.694439267234921*^9}}],
+
+Cell[BoxData[
+ RowBox[{"-", "0.6561932497254835`"}]], "Output",
+ CellChangeTimes->{3.694439268515874*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["FL2"], "Input",
+ CellChangeTimes->{{3.6944392806259203`*^9, 3.694439281462245*^9}}],
+
+Cell[BoxData[
+ RowBox[{"-", "0.6711571909490621`"}]], "Output",
+ CellChangeTimes->{3.69443928247755*^9}]
+}, Open  ]]
+},
+WindowSize->{1301, 744},
+WindowMargins->{{1, Automatic}, {Automatic, 28}},
+FrontEndVersion->"11.0 for Linux x86 (64-bit) (September 21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 6809, 171, 399, "Input"],
+Cell[CellGroupData[{
+Cell[7392, 195, 202, 4, 32, "Input"],
+Cell[7597, 201, 1469, 32, 347, "Print"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9103, 238, 97, 1, 32, "Input"],
+Cell[9203, 241, 105, 2, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9345, 248, 97, 1, 32, "Input"],
+Cell[9445, 251, 104, 2, 32, "Output"]
+}, Open  ]]
+}
+]
+*)
+
